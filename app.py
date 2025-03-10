@@ -1,26 +1,35 @@
-from flask import Flask, render_template, request
+from flask import Flask,render_template,request,redirect,url_for
 
 app = Flask(__name__)
 
-@app.route('/')
-def index ():
-    return render_template ('index.html')
+@app.route('/login',methods=['GET'])
+def index():
+    return render_template("index.html")
 
-#Recibir dos parametros
+#recibir dos parametros nombre y edad
 @app.route('/saludo/<nombre>/<int:edad>')
-def saludo(nombre,edad):
+def prueba(nombre,edad):
     if(edad<18):
-        return 'Hola ' + nombre + "eres mayor de edad"
+        return "Hola "+nombre+" eres menor de edad"
     else:
-        return 'Hola ' + nombre + "eres menor de edad"
+        return "Hola "+nombre+" eres mayor de edad"
 
-#Login post
-@app.route('/login', methods=['POST'])
+#login post
+@app.route('/login',methods=['POST'])
 def login():
-    #Obtener datos del formulario
-    username = request.form['username']
+    #obtener los datos del formulario
+    username = request.form['username'] 
     password = request.form['password']
-    return f"Nombre: {username} Pass: {password}"   
+    if(username == 'admin' and password == 'admin'):
+         return redirect(url_for('admin'))
+    else:
+         return render_template("index.html",mensaje="Usuario o contraseña incorrecta")
 
-if __name__ == '__main__':
-    app.run(debug=True, port=80)
+    
+    
+@app.route('/admin',methods=['GET'])
+def admin():
+    return render_template("admin/admin.html")
+
+if __name__ == '__main__':    
+    app.run(debug=True,port=80)
