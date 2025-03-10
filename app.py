@@ -1,7 +1,7 @@
 from flask import Flask,render_template,request,redirect,url_for,session
 
 app = Flask(__name__)
-app.secret_key = "123456"
+app.secret_key="123456"
 
 @app.route('/login',methods=['GET'])
 def index():
@@ -28,14 +28,15 @@ def login():
 
     else:
          return render_template("index.html",mensaje="Usuario o contraseña incorrecta")
-
+    
 @app.route('/admin',methods=['GET'])
 def admin():
-    if(session["username"]):
+    if "username" in session:
         return render_template("admin/admin.html")
     else:
         return redirect(url_for('login'))
 
 if __name__ == '__main__':    
     app.run(debug=True,port=80)
+    
     
